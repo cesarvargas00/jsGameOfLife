@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head>
   <title>Game of Life</title>
@@ -8,12 +8,13 @@
         border:1px solid grey;
         width:8px;
         height:8px;   
-        }â€‹
+        }
     </style>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script type="text/javascript">
     //GAME OF LIFE
     //MADE BY CESAR VARGAS
+    //learning javascript & jquery
     //
   var tam=60;
   //Cria as divs
@@ -28,7 +29,7 @@
         document.write("<div style='clear:both;'></div>");
   }
 
-  //Cria o array das divs e inicializa todos com false ( nÃ£o //selecionado )
+  //Cria o array das divs e inicializa todos com false ( não selecionado )
   var array_divs = {};
     var array_temp = {};
   for(var i = 0 ; i< tam; i++ )
@@ -74,7 +75,8 @@
                 count_vivos++;
             if (array_divs[(i+1)+'-'+j])
                 count_vivos++;
-
+            
+            //Regras do jogo
             if(count_vivos < 2 && array_divs[i+'-'+j])
                 array_temp[i+'-'+j] = false;
             else if(count_vivos > 3 && array_divs[i+'-'+j])
