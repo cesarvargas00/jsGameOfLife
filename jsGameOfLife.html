@@ -16,6 +16,7 @@
     //MADE BY CESAR VARGAS
     //learning javascript & jquery
     //
+  var generation = 0;
   var tam=60;
   //Cria as divs
   for(var i = 0; i < tam; i++ ){
@@ -100,9 +101,11 @@
                 $('#'+i+'-'+j).css("background-color","black");
                 else
                 $('#'+i+'-'+j).css("background-color","white");
+            $('#generation').html(generation);
     }
 
     function nova_geracao(){
+        generation++;
         calcula_array_temp();
         array_divs = array_temp;
         update_divs();
