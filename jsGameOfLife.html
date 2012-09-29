@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game of Life</title>
+    <style type="text/css">
+        div.canvas {
+        background-color:white;
+        border:1px solid grey;
+        width:8px;
+        height:8px;   
+        }
+    </style>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript">
+    //GAME OF LIFE
+    //MADE BY CESAR VARGAS
+    //learning javascript & jquery
+    //
+  var tam=60;
+  //Cria as divs
+  for(var i = 0; i < tam; i++ ){
+        for(var j = 0; j < tam; j++){                                
+            document.write("<div class='canvas' style='float:left;' id='");
+            document.write(i);
+            document.write("-");
+            document.write(j);
+            document.write("'></div>");
+        }
+        document.write("<div style='clear:both;'></div>");
+  }
+
+  //Cria o array das divs e inicializa todos com false ( não selecionado )
+  var array_divs = {};
+    var array_temp = {};
+  for(var i = 0 ; i< tam; i++ )
+        for(var j = 0 ; j< tam; j++)
+            array_divs[i+"-"+j] = false;
+    //Ao clicar nas divs
+    $('.canvas').click(function(){
+      if(!array_divs[$(this).attr('id')]){
+        $(this).css("background-color","black");
+        array_divs[$(this).attr('id')] = true;
+      }
+      else{
+        $(this).css("background-color","white");
+        array_divs[$(this).attr('id')] = false;
+      }
+      
+      //alert(array_divs[$(this).attr('id')]);
+    });
+
+    //Ao passar o mouse
+    $('.canvas').mouseover(function(){
+      $('#position').html($(this).attr('id'));
+    });
+
+    function calcula_array_temp(){
+    array_temp = {};
+    for (var i = 0; i < tam; i++) {
+        for(var j = 0; j<tam; j++){
+            var count_vivos = 0;
+            if (array_divs[i+'-'+(j-1)])
+                count_vivos++;
+            if (array_divs[i+'-'+(j+1)])
+                count_vivos++;
+            if (array_divs[(i-1)+'-'+(j-1)])
+                count_vivos++;
+            if (array_divs[(i-1)+'-'+(j+1)])
+                count_vivos++;
+            if (array_divs[(i-1)+'-'+j])
+                count_vivos++;
+            if (array_divs[(i+1)+'-'+(j-1)])
+                count_vivos++;
+            if (array_divs[(i+1)+'-'+(j+1)])
+                count_vivos++;
+            if (array_divs[(i+1)+'-'+j])
+                count_vivos++;
+            
+            //Regras do jogo
+            if(count_vivos < 2 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = false;
+            else if(count_vivos > 3 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = false;
+            else if (count_vivos == 2 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+            else if (count_vivos == 3 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+            else if (count_vivos == 3 && !array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+            else
+                array_temp[i+'-'+j] = false;
+        }   
+    }
+    }
+
+    function update_divs(){
+        for(var i=0;i<tam;i++)
+            for(var j=0;j<tam;j++)
+                if(array_divs[i+'-'+j])
+                $('#'+i+'-'+j).css("background-color","black");
+                else
+                $('#'+i+'-'+j).css("background-color","white");
+    }
+
+    function nova_geracao(){
+        calcula_array_temp();
+        array_divs = array_temp;
+        update_divs();
+    }
+  </script>
+</head>
+<body>
+  <p id='position'></p>
+  <input type="button" value="Run!" onclick="go()" />
+    <p id='status' style='color:red;'>Stopped</p>
+    <script>
+        var intervalID;
+        var running = false;
+        function go()
+        {
+            if(!running){
+                $('input').attr('value',"Stop!");
+                intervalID = setInterval(function(){nova_geracao()},130);
+                $('#status').css("color","green").html('Running!');
+            }
+            else{
+                $('input').attr('value',"Run!");
+                clearInterval(intervalID);
+                $('#status').css("color","red").html('Stopped!');
+            }
+            running = !running;
+        }
+    </script>
+</body>
+</html>

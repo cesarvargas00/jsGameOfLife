@@ -1,4 +1,7 @@
 jsGameOfLife
 ============
-Author:Cesar Vargas
-It`s a javascript/html implementation of Conway`s of life. Have fun :)
+
+<b>Author</b> : Cesar Vargas
+
+A `javascript/html` implementation of Conway\`s game of life. Have fun :)
+
