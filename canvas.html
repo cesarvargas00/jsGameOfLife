@@ -11,31 +11,38 @@
       }
     </style>
     <script>
+      LADO = 12;
+      TAM_CANVAS = 600;
+
       function desenhaGrid(context){
-      context.lineWidth = 1;
-      for(i = 12;i<600;i=i+12){
-	      context.moveTo(i,0);
-		  context.lineTo(i,600);
-	      context.stroke();
-  	  }
-  	  for(i = 12;i<600;i=i+12){
-	      context.moveTo(0,i);
-		  context.lineTo(600,i);
-	      context.stroke();
-  	  }
-  	  context.fillStyle = "rgb(0,0,0)";
-  	  context.fillRect(7*12,7*12,12,12);
+        context.lineWidth = 1;
+        for(i = LADO;i<TAM_CANVAS;i=i+LADO){
+  	      context.moveTo(i,0);
+  		    context.lineTo(i,TAM_CANVAS);
+  	      context.stroke();
+    	  }
+    	  for(i = LADO;i<TAM_CANVAS;i=i+LADO){
+  	      context.moveTo(0,i);
+  		    context.lineTo(TAM_CANVAS,i);
+          context.stroke();
+    	  }
       }
+
       function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect(), root = document.documentElement;
-
-        // return relative mouse position
         var mouseX = evt.clientX -rect.top -root.scrollTop;
         var mouseY = evt.clientY -rect.left -root.scrollLeft;
         return {
-          x: mouseX,
-          y: mouseY
+          x: parseInt(mouseX/LADO),
+          y: parseInt(mouseY/LADO)
         };
+      }
+
+      function paintSquare(mousePos) {
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        context.fillStyle = "rgb(0,0,0)";
+        context.fillRect(mousePos.x*LADO,mousePos.y*LADO,LADO,LADO);
       }
 
       window.onload = function() {
@@ -43,7 +50,14 @@
         var context = canvas.getContext('2d');
         desenhaGrid(context);
         canvas.addEventListener('mousemove', function(evt) {
-          var mousePos = getMousePos(canvas, evt);           
+          var coords = document.getElementById('coords');
+          var mousePos = getMousePos(canvas, evt);
+          coords.innerHTML = mousePos.x + ',' + mousePos.y;
+        }, false);
+
+        canvas.addEventListener('click', function(evt) {
+          var mousePos = getMousePos(canvas, evt);
+          paintSquare(mousePos);
         }, false);
 
       };
@@ -52,5 +66,6 @@
   </head>
   <body>
     <canvas id="myCanvas" width="600" height="600"></canvas>
+    <p id="coords"></p>
   </body>
 </html>
