@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      #myCanvas {
+        border: 1px solid #9C9898;
+      }
+    </style>
+    <script>
+      function desenhaGrid(context){
+      context.lineWidth = 1;
+      for(i = 12;i<600;i=i+12){
+	      context.moveTo(i,0);
+		  context.lineTo(i,600);
+	      context.stroke();
+  	  }
+  	  for(i = 12;i<600;i=i+12){
+	      context.moveTo(0,i);
+		  context.lineTo(600,i);
+	      context.stroke();
+  	  }
+  	  context.fillStyle = "rgb(0,0,0)";
+  	  context.fillRect(7*12,7*12,12,12);
+      }
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect(), root = document.documentElement;
+
+        // return relative mouse position
+        var mouseX = evt.clientX -rect.top -root.scrollTop;
+        var mouseY = evt.clientY -rect.left -root.scrollLeft;
+        return {
+          x: mouseX,
+          y: mouseY
+        };
+      }
+
+      window.onload = function() {
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        desenhaGrid(context);
+        canvas.addEventListener('mousemove', function(evt) {
+          var mousePos = getMousePos(canvas, evt);           
+        }, false);
+
+      };
+
+    </script>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+  </body>
+</html>
