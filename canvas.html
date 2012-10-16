@@ -7,14 +7,19 @@
         padding: 0px;
       }
       #myCanvas {
-        border: 1px solid #9C9898;
+        border: 1px solid black;
       }
     </style>
+    <script src = "http://code.jquery.com/jquery-latest.js"></script>
     <script>
+
       LADO = 12;
       TAM_CANVAS = 600;
+      generation = 0;
+      var intervalID;
+      running = false;
 
-      function desenhaGrid(context){
+      function drawGrid(context){
         context.lineWidth = 1;
         for(i = LADO;i<TAM_CANVAS;i=i+LADO){
   	      context.moveTo(i,0);
@@ -26,6 +31,20 @@
   		    context.lineTo(TAM_CANVAS,i);
           context.stroke();
     	  }
+      }
+
+      function updateGrid(){
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        //context.clearRect(0,0,canvas.width,canvas.height)
+        //drawGrid(context);
+        for(i=0;i<TAM_CANVAS/LADO;i++)
+          for(j=0;j<TAM_CANVAS/LADO;j++)
+            if(array_divs[i+"-"+j])
+              paintSquare({x:i,y:j});
+            else
+              clearSquare({x:i,y:j});
+
       }
 
       function getMousePos(canvas, evt) {
@@ -45,10 +64,17 @@
         context.fillRect(mousePos.x*LADO,mousePos.y*LADO,LADO,LADO);
       }
 
+      function clearSquare(mousePos) {
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        context.fillStyle = "rgb(255,255,255)";
+        context.fillRect(mousePos.x*LADO,mousePos.y*LADO,LADO,LADO);
+      }
+
       window.onload = function() {
         var canvas = document.getElementById('myCanvas');
         var context = canvas.getContext('2d');
-        desenhaGrid(context);
+        drawGrid(context);
         canvas.addEventListener('mousemove', function(evt) {
           var coords = document.getElementById('coords');
           var mousePos = getMousePos(canvas, evt);
@@ -57,15 +83,106 @@
 
         canvas.addEventListener('click', function(evt) {
           var mousePos = getMousePos(canvas, evt);
-          paintSquare(mousePos);
+          if(!array_divs[mousePos.x+"-"+mousePos.y]){
+            paintSquare(mousePos);
+            array_divs[mousePos.x+"-"+mousePos.y] = true;
+          }else{
+            array_divs[mousePos.x+"-"+mousePos.y] = false;
+            updateGrid();
+          }
         }, false);
 
       };
+
+      function false_array(){
+        for(var i = 0 ; i< TAM_CANVAS; i++ )
+          for(var j = 0 ; j< TAM_CANVAS; j++)
+            array_divs[i+"-"+j] = false;
+      }
+
+      //Cria o array das divs e inicializa todos com false ( não selecionado )
+      array_divs = {};
+      array_temp = {};
+      false_array();
+
+      function calcula_array_temp(){
+        array_temp = {};
+        for (var i = 0; i < TAM_CANVAS; i++) {
+          for(var j = 0; j< TAM_CANVAS; j++){
+             var count_vivos = 0;
+             if (array_divs[i+'-'+(j-1)])
+                count_vivos++;
+             if (array_divs[i+'-'+(j+1)])
+                count_vivos++;
+             if (array_divs[(i-1)+'-'+(j-1)])
+                count_vivos++;
+             if (array_divs[(i-1)+'-'+(j+1)])
+                count_vivos++;
+             if (array_divs[(i-1)+'-'+j])
+                count_vivos++;
+             if (array_divs[(i+1)+'-'+(j-1)])
+                count_vivos++;
+             if (array_divs[(i+1)+'-'+(j+1)])
+                count_vivos++;
+             if (array_divs[(i+1)+'-'+j])
+                count_vivos++;
+             //Regras do jogo
+             if(count_vivos < 2 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = false;
+             else if(count_vivos > 3 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = false;
+             else if (count_vivos == 2 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+             else if (count_vivos == 3 && array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+             else if (count_vivos == 3 && !array_divs[i+'-'+j])
+                array_temp[i+'-'+j] = true;
+             else
+                array_temp[i+'-'+j] = false;
+          }   
+        }
+      }
+
+      function nova_geracao(){
+        generation++;
+        calcula_array_temp();
+        array_divs = array_temp;
+        updateGrid();
+      }
+
+      function reset(){
+        false_array();
+        generation = 0;
+        updateGrid();
+      }
+
+      function go()
+      {
+         if(!running){
+            $('#inputRun').attr('value',"Stop!");
+            intervalID = setInterval(function(){nova_geracao()},130);
+            $('#status').css("color","green").html('Running!');
+         }
+         else{
+            $('#inputRun').attr('value',"Run!");
+            clearInterval(intervalID);
+            $('#status').css("color","red").html('Stopped!');
+         }
+         running = !running;
+      }
 
     </script>
   </head>
   <body>
     <canvas id="myCanvas" width="600" height="600"></canvas>
     <p id="coords"></p>
+    <span>
+         <input id = "inputRun" type = "button" value="Run!" onclick = "go()" />
+         <input type = "button" value = "Reset" onclick = "reset()" />
+    </span>
+    <p>Status: <span id = 'status' style = 'color:red;'>Stopped</span></p>
+    <p>Generation: <span id = 'generation'>0</span></p>
   </body>
 </html>
+
+
