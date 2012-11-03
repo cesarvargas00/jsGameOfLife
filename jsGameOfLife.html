@@ -3,27 +3,21 @@
    <head>
       <title>Game of Life</title>
       <meta charset="UTF-8">
-      <style type = "text/css">
-      div.canvas {
-         background-color:white;
-         border:1px solid grey;
-         width:8px;
-         height:8px;   
-      }
-      #position, p{
-         font-family: Courier;
-      }
-      </style>
+      <link rel="shortcut icon" href="http://media.tumblr.com/tumblr_m26sbdWzVU1r7yajm.gif">
+      <link rel="stylesheet" type="text/css" href="style.css">
+      <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
       <script src = "http://code.jquery.com/jquery-latest.js"></script>
       <script src = "jsGameOfLife.js"></script>
    </head>
-   <body>
-      <p id = 'position'></p>
+   <body>      
+      <p id = 'position'>0-0</p>
       <span>
          <input id = "inputRun" type = "button" value="Run!" onclick = "go()" />
          <input type = "button" value = "Reset" onclick = "reset()" />
       </span>
       <p>Status: <span id = 'status' style = 'color:red;'>Stopped</span></p>
       <p>Generation: <span id = 'generation'>0</span></p>
+      <a href="http://github.com/cesarvargas00/jsGameOfLife">github</a>
+      </div>
    </body>
 </html>

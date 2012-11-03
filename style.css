@@ -1,0 +1,35 @@
+@import url(http://fonts.googleapis.com/css?family=Redressed);
+      @import url(http://fonts.googleapis.com/css?family=Quicksand);
+      div.canvas {
+         background-color:white;
+         border:1px solid #979797;
+         width:8px;
+         height:8px;   
+      }
+      #position, p{
+         font-family: Courier;
+      }
+      body{
+         background-color: #e5e5e5;
+      }
+      #content{
+         text-align:center;
+         width:500px;
+         margin:auto;
+      }
+      h1{
+         font-family: 'Redressed', cursive;
+         font-size: 2.3em;
+         color: #4a4d73;
+         text-shadow: 1.3px 1.3px #738657;
+      }
+      a{
+         font-family: 'Quicksand', sans-serif;
+         text-decoration: none;
+         color: #4a4d73;
+         font-size: 1.5em;
+      }
+      a:hover{
+         font-size: 1.6em;
+         color: black;
+      }
