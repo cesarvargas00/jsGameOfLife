@@ -79,7 +79,7 @@ function calcula_array_temp() {
 
 function update_divs() {
    for(var i = 0; i < tam; i++)
-   for(var j = 0 j; < tam; j++)
+   for(var j = 0; j < tam; j++)
    if(array_divs[i + '-' + j]) $('#' + i + '-' + j).css("background-color", "black")
    else $('#' + i + '-' + j).css("background-color", "white")
    $('#generation').html(generation)
